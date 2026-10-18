@@ -7,6 +7,7 @@ import com.kmpbaseproject.core.routing.flow.decompose.FlowNavigationComponent
 import com.kmpbaseproject.core.routing.flow.decompose.FlowTransition
 import com.kmpbaseproject.core.routing.flow.decompose.Node
 import com.kmpbaseproject.core.routing.flow.decompose.Screen
+import com.kmpbaseproject.core.routing.flow.decompose.retainedFlowComponent
 import com.kmpbaseproject.core.routing.flow.decompose.viewModel
 import com.kmpbaseproject.core.ui.routing.Event
 import com.kmpbaseproject.feature.app.routing.AppFlowComponent
@@ -15,12 +16,16 @@ import com.kmpbaseproject.feature.app.routing.decompose.AppFlowNavigationCompone
 import com.kmpbaseproject.feature.cities.ui.routing.FlowEvent
 import com.kmpbaseproject.feature.cities.ui.screen.cityDetails.CityDetailsViewModel
 import com.kmpbaseproject.feature.hometabs.routing.decompose.HomeTabsFlowNavigationComponent
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 
 @Stable
 class AppFlowNavigationComponent(
   context: ComponentContext,
   override val component: AppFlowComponent,
 ) : FlowNavigationComponent<Config, Child>(context) {
+  override val configSerializer: KSerializer<Config> = Config.serializer()
+
   override fun initialConfig(): List<Config> = listOf(Config.Home)
 
   override fun transition(event: Event): FlowTransition<Config> {
@@ -40,16 +45,21 @@ class AppFlowNavigationComponent(
   override val childFactory: (Config, ComponentContext) -> Child = { config, componentContext ->
     when (config) {
       is Config.Home -> {
-        Child.Home(HomeTabsFlowNavigationComponent(componentContext, component.homeTabsFlowComponent()))
+        val homeTabsComponent = componentContext.retainedFlowComponent { component.homeTabsFlowComponent() }
+        Child.Home(HomeTabsFlowNavigationComponent(componentContext, homeTabsComponent))
       }
       is Config.CityDetails -> {
-        Child.CityDetails(component.viewModel<CityDetailsViewModel>(config.cityId))
+        Child.CityDetails(component.viewModel<CityDetailsViewModel>(componentContext, config.cityId))
       }
     }
   }
 
+  @Serializable
   sealed interface Config {
+    @Serializable
     data object Home : Config
+
+    @Serializable
     data class CityDetails(val cityId: Long) : Config
   }
 

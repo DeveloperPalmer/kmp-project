@@ -14,12 +14,16 @@ import com.kmpbaseproject.feature.map.routing.decompose.MapFlowNavigationCompone
 import com.kmpbaseproject.feature.map.ui.routing.FlowEvent
 import com.kmpbaseproject.feature.map.ui.screen.map.screen.map.MapViewModel
 import io.ktor.http.URLBuilder
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 
 @Stable
 class MapFlowNavigationComponent(
   context: ComponentContext,
   override val component: MapFlowComponent,
 ) : FlowNavigationComponent<Config, Child>(context) {
+  override val configSerializer: KSerializer<Config> = Config.serializer()
+
   override fun initialConfig(): List<Config> = listOf(Config.Map)
 
   override fun transition(event: Event): FlowTransition<Config> {
@@ -34,13 +38,15 @@ class MapFlowNavigationComponent(
     }
   }
 
-  override val childFactory: (Config, ComponentContext) -> Child = { config, _ ->
+  override val childFactory: (Config, ComponentContext) -> Child = { config, componentContext ->
     when (config) {
-      is Config.Map -> Child.Map(component.viewModel<MapViewModel>())
+      is Config.Map -> Child.Map(component.viewModel<MapViewModel>(componentContext))
     }
   }
 
+  @Serializable
   sealed interface Config {
+    @Serializable
     data object Map : Config
   }
 

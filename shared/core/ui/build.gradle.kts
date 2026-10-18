@@ -13,5 +13,6 @@ dependencies {
   commonMainApi(projects.shared.resources)
   commonMainApi(libs.bundles.orbit)
   commonMainApi(libs.paging.common)
+  commonMainApi(libs.androidx.lifecycle.viewmodel)
   commonMainImplementation(libs.essenty.back.handler)
 }

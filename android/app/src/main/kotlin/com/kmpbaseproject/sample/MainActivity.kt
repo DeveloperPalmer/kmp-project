@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.arkivanov.decompose.defaultComponentContext
 import com.kmpbaseproject.core.component.AndroidAppComponent
 import com.kmpbaseproject.core.component.AppComponentHolder
+import com.kmpbaseproject.core.routing.flow.decompose.retainedFlowComponent
 import com.kmpbaseproject.feature.app.routing.decompose.AppFlow
 import com.kmpbaseproject.feature.app.routing.decompose.AppFlowNavigationComponent
 import com.kmpbaseproject.uikit.theme.AppTheme
@@ -27,12 +28,15 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     super.onCreate(savedInstanceState)
     val appComponent = (applicationContext as AppComponentHolder).appComponent as AndroidAppComponent
-    val foregroundComponent = appComponent
-      .foregroundComponentFactory()
-      .create()
+    val context = defaultComponentContext()
+    // The DI graph of the root flow is kept with the view models that use it and dies when the Activity finishes
     val appFlowNavigationComponent = AppFlowNavigationComponent(
-      component = foregroundComponent.appFlowComponent(),
-      context = defaultComponentContext(),
+      context = context,
+      component = context.retainedFlowComponent {
+        appComponent.foregroundComponentFactory()
+          .create()
+          .appFlowComponent()
+      },
     )
     requestNotificationPermission()
     setContent {

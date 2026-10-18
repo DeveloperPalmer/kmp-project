@@ -14,6 +14,7 @@ import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.kmpbaseproject.core.routing.flow.decompose.Flow
 import com.kmpbaseproject.core.routing.flow.decompose.FlowNode
 import com.kmpbaseproject.core.routing.flow.decompose.FlowTransition
+import com.kmpbaseproject.core.routing.flow.decompose.retainedFlowComponent
 import com.kmpbaseproject.core.routing.flow.decompose.viewModel
 import com.kmpbaseproject.core.ui.routing.Event
 import com.kmpbaseproject.feature.cities.routing.decompose.CitiesFlowNavigationComponent
@@ -28,20 +29,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 @Stable
 class HomeTabsFlowNavigationComponent(
-  context: ComponentContext,
+  componentContext: ComponentContext,
   val component: HomeTabsFlowComponent,
-) : FlowNode<Config>(), BackHandlerOwner by context {
+) : FlowNode<Config>(), BackHandlerOwner by componentContext {
   private val eventScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
   private val pagesNavigation = PagesNavigation<Config>()
 
-  val viewModel = component.viewModel<HomeViewModel>()
+  val viewModel = component.viewModel<HomeViewModel>(componentContext)
 
-  val pages: Value<ChildPages<Config, Child>> = context.childPages(
+  val pages: Value<ChildPages<Config, Child>> = componentContext.childPages(
     source = pagesNavigation,
-    serializer = null,
+    serializer = Config.serializer(),
     childFactory = ::child,
     initialPages = {
       Pages(
@@ -55,10 +57,8 @@ class HomeTabsFlowNavigationComponent(
     eventScope.launch {
       viewModel.events.collect { event -> dispatch(event) }
     }
-    context.lifecycle.doOnDestroy {
+    componentContext.lifecycle.doOnDestroy {
       eventScope.cancel()
-      viewModel.destroy()
-      component.coroutineScope().cancel()
     }
   }
 
@@ -89,14 +89,14 @@ class HomeTabsFlowNavigationComponent(
       is Config.Cities -> {
         val component = CitiesFlowNavigationComponent(
           context = context,
-          component = component.citiesFlowComponent()
+          component = context.retainedFlowComponent { component.citiesFlowComponent() }
         )
         Child.Cities(component)
       }
       is Config.Map -> {
         val component = MapFlowNavigationComponent(
           context = context,
-          component = component.mapFlowComponent()
+          component = context.retainedFlowComponent { component.mapFlowComponent() }
         )
         Child.Map(component)
       }
@@ -112,8 +112,12 @@ class HomeTabsFlowNavigationComponent(
     }
   }
 
+  @Serializable
   sealed interface Config {
+    @Serializable
     data object Cities : Config
+
+    @Serializable
     data object Map : Config
   }
 

@@ -1,5 +1,8 @@
 package com.kmpbaseproject.core.routing.flow.decompose
 
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.kmpbaseproject.core.routing.di.FlowComponent
 import com.kmpbaseproject.core.ui.mvi.BaseViewModel
 import com.kmpbaseproject.core.ui.viewmodel.AssistedViewModelProvider
@@ -13,6 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNotSame
+import kotlin.test.assertSame
 
 class FlowComponentViewModelTest {
   private val component = TestFlowComponent(
@@ -28,19 +32,26 @@ class FlowComponentViewModelTest {
     ),
   )
 
+  private val context = newContext()
+
   @Test
   fun `finds view model registered in flow or its parent flows`() {
-    assertIs<MainViewModel>(component.viewModel<MainViewModel>())
+    assertIs<MainViewModel>(component.viewModel<MainViewModel>(context))
   }
 
   @Test
-  fun `creates new view model on each call`() {
-    assertNotSame(component.viewModel<MainViewModel>(), component.viewModel<MainViewModel>())
+  fun `returns the same view model for the same context`() {
+    assertSame(component.viewModel<MainViewModel>(context), component.viewModel<MainViewModel>(context))
+  }
+
+  @Test
+  fun `creates own view model for each context`() {
+    assertNotSame(component.viewModel<MainViewModel>(context), component.viewModel<MainViewModel>(newContext()))
   }
 
   @Test
   fun `passes params to assisted factory in order`() {
-    val details = component.viewModel<DetailsViewModel>("Scooter", 42)
+    val details = component.viewModel<DetailsViewModel>(context, "Scooter", 42)
 
     assertEquals("Scooter", details.title)
     assertEquals(42, details.id)
@@ -48,20 +59,24 @@ class FlowComponentViewModelTest {
 
   @Test
   fun `fails for view model that is not registered`() {
-    val error = assertFailsWith<IllegalStateException> { component.viewModel<UnknownViewModel>() }
+    val error = assertFailsWith<IllegalStateException> { component.viewModel<UnknownViewModel>(context) }
 
     assertEquals("ViewModel ${UnknownViewModel::class.qualifiedName} is not registered", error.message)
   }
 
   @Test
   fun `does not mix plain and assisted view models`() {
-    val plainWithParams = assertFailsWith<IllegalStateException> { component.viewModel<MainViewModel>("Scooter") }
-    val assistedWithoutParams = assertFailsWith<IllegalStateException> { component.viewModel<DetailsViewModel>() }
+    val plainWithParams =
+      assertFailsWith<IllegalStateException> { component.viewModel<MainViewModel>(context, "Scooter") }
+    val assistedWithoutParams =
+      assertFailsWith<IllegalStateException> { component.viewModel<DetailsViewModel>(context) }
 
     assertEquals("ViewModel ${MainViewModel::class.qualifiedName} is not registered", plainWithParams.message)
     assertEquals("ViewModel ${DetailsViewModel::class.qualifiedName} is not registered", assistedWithoutParams.message)
   }
 }
+
+private fun newContext(): ComponentContext = DefaultComponentContext(LifecycleRegistry())
 
 // Only the merged sets are filled: they alone carry view models of parent flows
 private class TestFlowComponent(

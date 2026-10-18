@@ -32,6 +32,7 @@ androidx-collection = "1.5.0"
 
 # UI
 paging = "3.5.1"
+androidx-lifecycle = "2.11.0"
 compose-multiplatform = "1.12.1"
 compose-material3 = "1.9.0" # Material3 is versioned separately from Compose Multiplatform
 
@@ -110,6 +111,7 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
 compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
 

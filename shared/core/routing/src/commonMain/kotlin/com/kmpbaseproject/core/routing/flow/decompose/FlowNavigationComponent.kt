@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.serialization.KSerializer
 
 @Stable
 abstract class FlowNavigationComponent<Config : Any, Child : Node>(
@@ -24,6 +25,9 @@ abstract class FlowNavigationComponent<Config : Any, Child : Node>(
   abstract val component: FlowComponent
 
   abstract fun initialConfig(): List<Config>
+
+  // The stack is saved with the state of the Activity, so every config has to be serializable
+  protected abstract val configSerializer: KSerializer<Config>
 
   protected abstract val childFactory: (Config, ComponentContext) -> Child
 
@@ -35,7 +39,6 @@ abstract class FlowNavigationComponent<Config : Any, Child : Node>(
   init {
     context.lifecycle.doOnDestroy {
       eventScope.cancel()
-      component.coroutineScope().cancel()
     }
   }
 
@@ -44,7 +47,7 @@ abstract class FlowNavigationComponent<Config : Any, Child : Node>(
   val stack: Value<ChildStack<*, Child>> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
     context.childStack(
       source = navigation,
-      serializer = null,
+      serializer = configSerializer,
       initialStack = { initialConfig() },
       handleBackButton = true,
     ) { config, componentContext ->
@@ -55,7 +58,6 @@ abstract class FlowNavigationComponent<Config : Any, Child : Node>(
         }
         componentContext.lifecycle.doOnDestroy {
           events.cancel()
-          child.viewModel.destroy()
         }
       }
       if (child is Flow) {

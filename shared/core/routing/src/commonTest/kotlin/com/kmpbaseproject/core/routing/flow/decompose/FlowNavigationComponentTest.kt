@@ -4,7 +4,6 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.essenty.lifecycle.resume
 import com.kmpbaseproject.core.routing.di.FlowComponent
 import com.kmpbaseproject.core.ui.mvi.BaseViewModel
@@ -14,16 +13,16 @@ import com.kmpbaseproject.core.ui.viewmodel.ViewModelProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import org.orbitmvi.orbit.orbitContainer
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 
 class FlowNavigationComponentTest {
   @BeforeTest
@@ -107,16 +106,6 @@ class FlowNavigationComponentTest {
     assertEquals(listOf(TestConfig.Root, TestConfig.Details), nested.configs())
     assertEquals(listOf(TestParentConfig.Nested), parent.configs())
   }
-
-  @Test
-  fun `cancels flow coroutine scope on destroy`() {
-    val lifecycle = LifecycleRegistry().apply { resume() }
-    val flow = TestFlowNavigationComponent(DefaultComponentContext(lifecycle))
-
-    lifecycle.destroy()
-
-    assertFalse(flow.component.coroutineScope().isActive)
-  }
 }
 
 private fun resumedContext(): ComponentContext = DefaultComponentContext(LifecycleRegistry().apply { resume() })
@@ -125,6 +114,8 @@ private class TestFlowNavigationComponent(
   context: ComponentContext = resumedContext(),
   override val component: FlowComponent = ScopeFlowComponent(),
 ) : FlowNavigationComponent<TestConfig, TestChild>(context) {
+  override val configSerializer: KSerializer<TestConfig> = TestConfig.serializer()
+
   override fun initialConfig(): List<TestConfig> = listOf(TestConfig.Root)
 
   override fun transition(event: Event): FlowTransition<TestConfig> {
@@ -149,6 +140,8 @@ private class TestFlowNavigationComponent(
 // Hosts TestFlowNavigationComponent as a nested flow
 private class TestParentFlow : FlowNavigationComponent<TestParentConfig, TestParentChild>(resumedContext()) {
   override val component: FlowComponent = ScopeFlowComponent()
+
+  override val configSerializer: KSerializer<TestParentConfig> = TestParentConfig.serializer()
 
   override fun initialConfig(): List<TestParentConfig> = listOf(TestParentConfig.Nested)
 
@@ -193,16 +186,26 @@ private class ScopeFlowComponent : FlowComponent {
   override fun coroutineScope(): CoroutineScope = scope
 }
 
+@Serializable
 private sealed interface TestConfig {
+  @Serializable
   data object Root : TestConfig
+
+  @Serializable
   data object Details : TestConfig
+
+  @Serializable
   data object More : TestConfig
 }
 
 private class TestChild(override val viewModel: TestViewModel) : Screen
 
+@Serializable
 private sealed interface TestParentConfig {
+  @Serializable
   data object Nested : TestParentConfig
+
+  @Serializable
   data object Other : TestParentConfig
 }
 

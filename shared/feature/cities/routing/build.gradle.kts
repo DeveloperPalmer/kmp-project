@@ -1,5 +1,6 @@
 plugins {
   id("compose-convention")
+  kotlin("plugin.serialization")
 }
 
 kotlin {
