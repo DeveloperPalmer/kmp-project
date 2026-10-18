@@ -28,7 +28,11 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     super.onCreate(savedInstanceState)
     val appComponent = (applicationContext as AppComponentHolder).appComponent as AndroidAppComponent
-    val context = defaultComponentContext()
+    // The stack is kept only through Activity recreation: after the process death the data of the screens is gone,
+    // so the app starts anew instead of restoring screens that have nothing to show
+    val context = defaultComponentContext(
+      isStateSavingAllowed = { isChangingConfigurations }
+    )
     // The DI graph of the root flow is kept with the view models that use it and dies when the Activity finishes
     val appFlowNavigationComponent = AppFlowNavigationComponent(
       context = context,
