@@ -16,7 +16,6 @@ import org.orbitmvi.orbit.syntax.Syntax
 abstract class BaseViewModel<S : Any, SE : Any> private constructor(
   val viewModelScope: CoroutineScope
 ) : ViewModel(viewModelScope), OrbitContainerHost<S, S, SE> {
-
   constructor() : this(CoroutineScope(SupervisorJob() + Dispatchers.Default))
 
   private val eventChannel = Channel<Event>(Channel.UNLIMITED)

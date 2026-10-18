@@ -29,7 +29,7 @@ abstract class FlowNavigationComponent<Config : Any, Child : Node>(
   // The stack is saved with the state of the Activity, so every config has to be serializable
   protected abstract val configSerializer: KSerializer<Config>
 
-  protected abstract val childFactory: (Config, ComponentContext) -> Child
+  protected abstract val childFactory: ChildScope.(Config) -> Child
 
   protected val navigation = StackNavigation<Config>()
 
@@ -37,9 +37,7 @@ abstract class FlowNavigationComponent<Config : Any, Child : Node>(
   private val eventScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
   init {
-    context.lifecycle.doOnDestroy {
-      eventScope.cancel()
-    }
+    context.lifecycle.doOnDestroy { eventScope.cancel() }
   }
 
   // There is an initialization conflict between stack and childFactory fields,
@@ -51,10 +49,17 @@ abstract class FlowNavigationComponent<Config : Any, Child : Node>(
       initialStack = { initialConfig() },
       handleBackButton = true,
     ) { config, componentContext ->
-      val child = childFactory(config, componentContext)
+
+      val child = ChildScope(
+        owner = component,
+        context = componentContext
+      ).childFactory(config)
+
       if (child is Screen) {
         val events = eventScope.launch {
-          child.viewModel.events.collect { event -> dispatch(event) }
+          child.viewModel
+            .events
+            .collect { event -> dispatch(event) }
         }
         componentContext.lifecycle.doOnDestroy {
           events.cancel()

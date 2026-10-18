@@ -2,13 +2,12 @@ package com.kmpbaseproject.feature.app.routing.decompose
 
 import androidx.compose.runtime.Stable
 import com.arkivanov.decompose.ComponentContext
+import com.kmpbaseproject.core.routing.flow.decompose.ChildScope
 import com.kmpbaseproject.core.routing.flow.decompose.Flow
 import com.kmpbaseproject.core.routing.flow.decompose.FlowNavigationComponent
 import com.kmpbaseproject.core.routing.flow.decompose.FlowTransition
 import com.kmpbaseproject.core.routing.flow.decompose.Node
 import com.kmpbaseproject.core.routing.flow.decompose.Screen
-import com.kmpbaseproject.core.routing.flow.decompose.retainedFlowComponent
-import com.kmpbaseproject.core.routing.flow.decompose.viewModel
 import com.kmpbaseproject.core.ui.routing.Event
 import com.kmpbaseproject.feature.app.routing.AppFlowComponent
 import com.kmpbaseproject.feature.app.routing.decompose.AppFlowNavigationComponent.Child
@@ -42,14 +41,13 @@ class AppFlowNavigationComponent(
     }
   }
 
-  override val childFactory: (Config, ComponentContext) -> Child = { config, componentContext ->
+  override val childFactory: ChildScope.(Config) -> Child = { config ->
     when (config) {
       is Config.Home -> {
-        val homeTabsComponent = componentContext.retainedFlowComponent { component.homeTabsFlowComponent() }
-        Child.Home(HomeTabsFlowNavigationComponent(componentContext, homeTabsComponent))
+        Child.Home(HomeTabsFlowNavigationComponent(context, flowComponent { component.homeTabsFlowComponent() }))
       }
       is Config.CityDetails -> {
-        Child.CityDetails(component.viewModel<CityDetailsViewModel>(componentContext, config.cityId))
+        Child.CityDetails(viewModel<CityDetailsViewModel>(config.cityId))
       }
     }
   }

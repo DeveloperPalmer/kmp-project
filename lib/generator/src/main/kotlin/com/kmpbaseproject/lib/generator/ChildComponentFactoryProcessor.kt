@@ -9,6 +9,9 @@ import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
+import com.kmpbaseproject.lib.annotation.ChildComponent
+import com.kmpbaseproject.lib.annotation.MergeSubcomponent
+import com.kmpbaseproject.lib.annotation.MergedViewModels
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
@@ -20,9 +23,6 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
-import com.kmpbaseproject.lib.annotation.ChildComponent
-import com.kmpbaseproject.lib.annotation.MergeSubcomponent
-import com.kmpbaseproject.lib.annotation.MergedViewModels
 import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent
 import software.amazon.lastmile.kotlin.inject.anvil.SingleIn

@@ -7,6 +7,9 @@ import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
+import com.kmpbaseproject.lib.annotation.FlowCoroutineScope
+import com.kmpbaseproject.lib.annotation.MergeSubcomponent
+import com.kmpbaseproject.lib.annotation.ScopedViewModel
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -19,9 +22,6 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.ksp.toClassName
 import com.squareup.kotlinpoet.ksp.writeTo
-import com.kmpbaseproject.lib.annotation.FlowCoroutineScope
-import com.kmpbaseproject.lib.annotation.MergeSubcomponent
-import com.kmpbaseproject.lib.annotation.ScopedViewModel
 import kotlinx.coroutines.CoroutineScope
 import me.tatarka.inject.annotations.Provides
 import software.amazon.lastmile.kotlin.inject.anvil.ContributesSubcomponent

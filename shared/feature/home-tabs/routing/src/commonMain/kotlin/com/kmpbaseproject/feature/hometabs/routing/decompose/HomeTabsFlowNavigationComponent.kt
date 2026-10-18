@@ -11,11 +11,10 @@ import com.arkivanov.decompose.router.pages.select
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 import com.arkivanov.essenty.lifecycle.doOnDestroy
+import com.kmpbaseproject.core.routing.flow.decompose.ChildScope
 import com.kmpbaseproject.core.routing.flow.decompose.Flow
 import com.kmpbaseproject.core.routing.flow.decompose.FlowNode
 import com.kmpbaseproject.core.routing.flow.decompose.FlowTransition
-import com.kmpbaseproject.core.routing.flow.decompose.retainedFlowComponent
-import com.kmpbaseproject.core.routing.flow.decompose.viewModel
 import com.kmpbaseproject.core.ui.routing.Event
 import com.kmpbaseproject.feature.cities.routing.decompose.CitiesFlowNavigationComponent
 import com.kmpbaseproject.feature.hometabs.routing.HomeTabsFlowComponent
@@ -39,12 +38,12 @@ class HomeTabsFlowNavigationComponent(
   private val eventScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
   private val pagesNavigation = PagesNavigation<Config>()
 
-  val viewModel = component.viewModel<HomeViewModel>(componentContext)
+  val viewModel = ChildScope(componentContext, component).viewModel<HomeViewModel>()
 
   val pages: Value<ChildPages<Config, Child>> = componentContext.childPages(
     source = pagesNavigation,
     serializer = Config.serializer(),
-    childFactory = ::child,
+    childFactory = { config, childContext -> ChildScope(childContext, component).child(config) },
     initialPages = {
       Pages(
         selectedIndex = 0,
@@ -84,19 +83,19 @@ class HomeTabsFlowNavigationComponent(
   // Tabs have no back stack
   override fun navigateBack() = Unit
 
-  private fun child(config: Config, context: ComponentContext): Child {
+  private fun ChildScope.child(config: Config): Child {
     val child = when (config) {
       is Config.Cities -> {
         val component = CitiesFlowNavigationComponent(
           context = context,
-          component = context.retainedFlowComponent { component.citiesFlowComponent() }
+          component = flowComponent { component.citiesFlowComponent() }
         )
         Child.Cities(component)
       }
       is Config.Map -> {
         val component = MapFlowNavigationComponent(
           context = context,
-          component = context.retainedFlowComponent { component.mapFlowComponent() }
+          component = flowComponent { component.mapFlowComponent() }
         )
         Child.Map(component)
       }

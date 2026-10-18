@@ -128,7 +128,7 @@ private class TestFlowNavigationComponent(
     }
   }
 
-  override val childFactory: (TestConfig, ComponentContext) -> TestChild = { _, _ -> TestChild(TestViewModel()) }
+  override val childFactory: ChildScope.(TestConfig) -> TestChild = { TestChild(TestViewModel()) }
 
   fun back() = navigation.pop()
 
@@ -154,9 +154,9 @@ private class TestParentFlow : FlowNavigationComponent<TestParentConfig, TestPar
     }
   }
 
-  override val childFactory: (TestParentConfig, ComponentContext) -> TestParentChild = { config, componentContext ->
+  override val childFactory: ChildScope.(TestParentConfig) -> TestParentChild = { config ->
     when (config) {
-      TestParentConfig.Nested -> TestParentChild.Nested(TestFlowNavigationComponent(componentContext))
+      TestParentConfig.Nested -> TestParentChild.Nested(TestFlowNavigationComponent(context))
       TestParentConfig.Other -> TestParentChild.Other
     }
   }

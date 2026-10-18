@@ -1,11 +1,11 @@
 package com.kmpbaseproject.core.routing.di
 
+import com.kmpbaseproject.core.ui.viewmodel.AssistedViewModelProvider
+import com.kmpbaseproject.core.ui.viewmodel.ViewModelProvider
 import com.tschuchort.compiletesting.JvmCompilationResult
 import com.tschuchort.compiletesting.KotlinCompilation
 import com.tschuchort.compiletesting.SourceFile
 import com.tschuchort.compiletesting.configureKsp
-import com.kmpbaseproject.core.ui.viewmodel.AssistedViewModelProvider
-import com.kmpbaseproject.core.ui.viewmodel.ViewModelProvider
 import me.tatarka.inject.compiler.ksp.InjectProcessorProvider
 import java.io.File
 import java.io.OutputStream
