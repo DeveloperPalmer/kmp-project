@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Strings of the View fragment of the city details screen; the Compose UI uses the shared Compose resources -->
+<resources>
+  <string name="city_details_title">City information</string>
+  <string name="city_details_back">Back</string>
+  <string name="city_details_city">City</string>
+  <string name="city_details_country">Country</string>
+  <string name="city_details_population">Population</string>
+  <string name="city_details_population_value">%1$s people</string>
+  <string name="city_details_search">Search city info</string>
+</resources>

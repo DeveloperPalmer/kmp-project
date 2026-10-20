@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="city_details_title">Информация о городе</string>
+  <string name="city_details_back">Назад</string>
+  <string name="city_details_city">Город</string>
+  <string name="city_details_country">Страна</string>
+  <string name="city_details_population">Население</string>
+  <string name="city_details_population_value">%1$s чел</string>
+  <string name="city_details_search">Поиск информации о городе</string>
+</resources>

@@ -9,4 +9,7 @@ enum class CityDetailsRendering {
 
   /** A fragment that hosts the shared Compose UI in a ComposeView */
   FragmentCompose,
+
+  /** A fragment with its own XML layout on Android Views */
+  FragmentView,
 }

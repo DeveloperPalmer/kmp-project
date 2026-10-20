@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?android:attr/colorBackground"
+  android:orientation="vertical">
+
+  <Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    android:navigationContentDescription="@string/city_details_back"
+    android:navigationIcon="?android:attr/homeAsUpIndicator"
+    android:title="@string/city_details_title" />
+
+  <LinearLayout
+    android:id="@+id/city_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="8dp"
+    android:visibility="gone">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/city_details_city"
+      android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+      android:id="@+id/city_value"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:text="@string/city_details_country"
+      android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+      android:id="@+id/country_value"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:text="@string/city_details_population"
+      android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+      android:id="@+id/population_value"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="?android:attr/textAppearanceMedium" />
+  </LinearLayout>
+
+  <Space
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" />
+
+  <Button
+    android:id="@+id/search_button"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:text="@string/city_details_search" />
+</LinearLayout>

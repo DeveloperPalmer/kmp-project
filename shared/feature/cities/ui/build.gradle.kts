@@ -5,6 +5,11 @@ plugins {
 kotlin {
   android {
     namespace = "com.kmpbaseproject.feature.cities.ui"
+
+    // The View fragment of the city details screen has an XML layout and Android strings
+    androidResources {
+      enable = true
+    }
   }
 }
 

@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.compose.AndroidFragment
 
 // Which implementation draws the screen on Android: switch it to compare them
-private val RENDERING = CityDetailsRendering.FragmentCompose
+private val RENDERING = CityDetailsRendering.FragmentView
 
 @Composable
 actual fun CityDetailsScreen(viewModel: CityDetailsViewModel) {
@@ -16,6 +16,11 @@ actual fun CityDetailsScreen(viewModel: CityDetailsViewModel) {
     }
     CityDetailsRendering.FragmentCompose -> {
       AndroidFragment<CityDetailsFragmentCompose>(modifier = Modifier.fillMaxSize()) { fragment ->
+        fragment.onBind(viewModel)
+      }
+    }
+    CityDetailsRendering.FragmentView -> {
+      AndroidFragment<CityDetailsFragmentView>(modifier = Modifier.fillMaxSize()) { fragment ->
         fragment.onBind(viewModel)
       }
     }
