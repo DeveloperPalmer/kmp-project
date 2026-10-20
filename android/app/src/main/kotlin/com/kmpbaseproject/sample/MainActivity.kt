@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commitNow
 import com.arkivanov.decompose.defaultComponentContext
 import com.kmpbaseproject.core.component.AndroidAppComponent
 import com.kmpbaseproject.core.component.AppComponentHolder
@@ -31,6 +32,7 @@ class MainActivity : FragmentActivity() {
     val context = defaultComponentContext(
       isStateSavingAllowed = { isChangingConfigurations }
     )
+    dropFragmentsAfterProcessDeath(savedInstanceState)
     // The DI graph of the root flow is kept with the view models that use it and dies when the Activity finishes
     val appFlowNavigationComponent = AppFlowNavigationComponent(
       context = context,
@@ -47,6 +49,16 @@ class MainActivity : FragmentActivity() {
           component = appFlowNavigationComponent
         )
       }
+    }
+  }
+
+  // Fragments follow the stack: FragmentManager restores them after the process death too, but the screens that
+  // hosted them start anew, and the fragments would wait for their containers until the Activity finishes
+  private fun dropFragmentsAfterProcessDeath(savedInstanceState: Bundle?) {
+    // A non-configuration instance is handed over only through recreation, without it the state outlived the process
+    if (savedInstanceState == null || lastNonConfigurationInstance != null) return
+    supportFragmentManager.commitNow {
+      supportFragmentManager.fragments.forEach { fragment -> remove(fragment) }
     }
   }
 
