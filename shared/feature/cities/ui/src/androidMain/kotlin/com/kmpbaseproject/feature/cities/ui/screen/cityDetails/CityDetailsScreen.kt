@@ -7,7 +7,7 @@ import androidx.fragment.compose.AndroidFragment
 import com.kmpbaseproject.core.ui.interop.ViewInteropMode
 
 // Which implementation draws the screen on Android: switch it to compare them
-private val interopMode = ViewInteropMode.FragmentViewBinding
+private val interopMode = ViewInteropMode.FragmentViewBindingInflate
 
 @Composable
 actual fun CityDetailsScreen(viewModel: CityDetailsViewModel) {
@@ -27,6 +27,11 @@ actual fun CityDetailsScreen(viewModel: CityDetailsViewModel) {
     }
     ViewInteropMode.FragmentViewBinding -> {
       AndroidFragment<CityDetailsFragmentViewBinding>(modifier = Modifier.fillMaxSize()) { fragment ->
+        fragment.onBind(viewModel)
+      }
+    }
+    ViewInteropMode.FragmentViewBindingInflate -> {
+      AndroidFragment<CityDetailsFragmentViewBindingInflate>(modifier = Modifier.fillMaxSize()) { fragment ->
         fragment.onBind(viewModel)
       }
     }

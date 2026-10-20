@@ -15,4 +15,7 @@ enum class ViewInteropMode {
 
   /** The same fragment on Android Views, whose views come from a generated ViewBinding */
   FragmentViewBinding,
+
+  /** The fragment on ViewBinding whose binding inflates the layout itself in onCreateView */
+  FragmentViewBindingInflate,
 }
