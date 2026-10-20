@@ -1,10 +1,12 @@
 package com.kmpbaseproject.feature.cities.ui.screen.cityDetails
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toolbar
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -15,6 +17,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kmpbaseproject.core.ui.formatPopulation
 import com.kmpbaseproject.feature.cities.ui.R
+import com.kmpbaseproject.uikit.view.ViewAppTheme
+import com.kmpbaseproject.uikit.view.applyPrimaryStyle
+import com.kmpbaseproject.uikit.view.applyStyle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -37,12 +42,16 @@ class CityDetailsFragmentView : Fragment(R.layout.fragment_city_details) {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    views = Views(view)
+    val views = Views(view)
+    this.views = views
+    applyTheme(view)
     applyWindowInsets(view)
-    view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
+    // Wired once per view, so the buttons work before the first state. The view model is read on click:
+    // after Activity recreation the view exists before onBind hands the view model over
+    views.backButton.setOnClickListener {
       boundViewModel.value?.navigateBack()
     }
-    view.findViewById<Button>(R.id.search_button).setOnClickListener {
+    views.searchButton.setOnClickListener {
       boundViewModel.value?.searchCityInfo()
     }
     // Collects only while the view is at least started and stops with it, not with the fragment
@@ -71,6 +80,40 @@ class CityDetailsFragmentView : Fragment(R.layout.fragment_city_details) {
     views.population.text = getString(R.string.city_details_population_value, formatPopulation(city.population))
   }
 
+  // Views cannot read AppTheme, so the same design tokens come through ViewAppTheme. The theme is applied
+  // to every new view: after switching to the dark theme the Activity and the fragment view are recreated
+  private fun applyTheme(root: View) {
+    val theme = ViewAppTheme(requireContext())
+    val colors = theme.colors
+    val typography = theme.typography
+
+    root.setBackgroundColor(
+      colors.background.primary.toArgb()
+    )
+
+    root.findViewById<ImageButton>(R.id.back_button).imageTintList = ColorStateList.valueOf(
+      colors.icon.primary.toArgb()
+    )
+
+    root.findViewById<TextView>(R.id.title).applyStyle(
+      typography.title4,
+      colors.text.primary
+    )
+    for (label in listOf(R.id.city_label, R.id.country_label, R.id.population_label)) {
+      root.findViewById<TextView>(label).applyStyle(
+        typography.subtitle1,
+        colors.text.primary
+      )
+    }
+    for (value in listOf(R.id.city_value, R.id.country_value, R.id.population_value)) {
+      root.findViewById<TextView>(value).applyStyle(
+        typography.body1,
+        colors.text.primary
+      )
+    }
+    root.findViewById<Button>(R.id.search_button).applyPrimaryStyle(theme)
+  }
+
   // The screen is edge-to-edge: the Compose UI pads itself with safeDrawingPadding, the views do it here
   private fun applyWindowInsets(root: View) {
     ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
@@ -85,5 +128,7 @@ class CityDetailsFragmentView : Fragment(R.layout.fragment_city_details) {
     val city: TextView = root.findViewById(R.id.city_value)
     val country: TextView = root.findViewById(R.id.country_value)
     val population: TextView = root.findViewById(R.id.population_value)
+    val backButton: ImageButton = root.findViewById(R.id.back_button)
+    val searchButton: Button = root.findViewById(R.id.search_button)
   }
 }

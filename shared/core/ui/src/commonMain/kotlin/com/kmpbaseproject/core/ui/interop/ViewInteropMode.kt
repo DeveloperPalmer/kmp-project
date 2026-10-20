@@ -1,9 +1,9 @@
-package com.kmpbaseproject.feature.cities.ui.screen.cityDetails
+package com.kmpbaseproject.core.ui.interop
 
 /**
  * Which implementation draws the city details screen on Android
  */
-enum class CityDetailsRendering {
+enum class ViewInteropMode {
   /** The shared Compose UI, as on iOS */
   Compose,
 

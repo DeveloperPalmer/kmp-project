@@ -4,22 +4,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.fragment.compose.AndroidFragment
+import com.kmpbaseproject.core.ui.interop.ViewInteropMode
 
 // Which implementation draws the screen on Android: switch it to compare them
-private val RENDERING = CityDetailsRendering.FragmentView
+private val interopMode = ViewInteropMode.FragmentView
 
 @Composable
 actual fun CityDetailsScreen(viewModel: CityDetailsViewModel) {
-  when (RENDERING) {
-    CityDetailsRendering.Compose -> {
+  when (interopMode) {
+    ViewInteropMode.Compose -> {
       CityDetailsComposeScreen(viewModel = viewModel)
     }
-    CityDetailsRendering.FragmentCompose -> {
+    ViewInteropMode.FragmentCompose -> {
       AndroidFragment<CityDetailsFragmentCompose>(modifier = Modifier.fillMaxSize()) { fragment ->
         fragment.onBind(viewModel)
       }
     }
-    CityDetailsRendering.FragmentView -> {
+    ViewInteropMode.FragmentView -> {
       AndroidFragment<CityDetailsFragmentView>(modifier = Modifier.fillMaxSize()) { fragment ->
         fragment.onBind(viewModel)
       }
