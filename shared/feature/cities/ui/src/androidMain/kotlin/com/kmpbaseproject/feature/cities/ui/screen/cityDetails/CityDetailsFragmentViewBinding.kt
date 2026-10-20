@@ -13,13 +13,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kmpbaseproject.core.ui.formatPopulation
+import com.kmpbaseproject.core.ui.viewmodel.ViewModelBinder
+import com.kmpbaseproject.core.ui.viewmodel.ViewModelSlot
 import com.kmpbaseproject.feature.cities.ui.views.R
 import com.kmpbaseproject.feature.cities.ui.views.databinding.FragmentCityDetailsBinding
 import com.kmpbaseproject.uikit.view.ViewAppTheme
 import com.kmpbaseproject.uikit.view.applyPrimaryStyle
 import com.kmpbaseproject.uikit.view.applyStyle
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -28,10 +28,9 @@ import kotlinx.coroutines.launch
  * The screen on Android Views with the same XML layout as [CityDetailsFragmentView], whose views come from the
  * generated FragmentCityDetailsBinding instead of findViewById
  */
-class CityDetailsFragmentViewBinding : Fragment(R.layout.fragment_city_details) {
-  private val viewModel = MutableStateFlow<CityDetailsViewModel?>(null)
-  private val boundViewModel: StateFlow<CityDetailsViewModel?> = viewModel
-
+class CityDetailsFragmentViewBinding :
+  Fragment(R.layout.fragment_city_details),
+  ViewModelBinder<CityDetailsViewModel> by ViewModelSlot() {
   // The binding of the current fragment view: created in onViewCreated, dropped in onDestroyView
   private var currentBinding: FragmentCityDetailsBinding? = null
   private val binding: FragmentCityDetailsBinding
@@ -47,24 +46,19 @@ class CityDetailsFragmentViewBinding : Fragment(R.layout.fragment_city_details) 
     // Wired once per view, so the buttons work before the first state. The view model is read on click:
     // after Activity recreation the view exists before onBind hands the view model over
     binding.backButton.setOnClickListener {
-      boundViewModel.value?.navigateBack()
+      viewModel.value?.navigateBack()
     }
     binding.searchButton.setOnClickListener {
-      boundViewModel.value?.searchCityInfo()
+      viewModel.value?.searchCityInfo()
     }
     // Collects only while the view is at least started and stops with it, not with the fragment
     viewLifecycleOwner.lifecycleScope.launch {
       viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        boundViewModel.filterNotNull().collectLatest { model ->
+        viewModel.filterNotNull().collectLatest { model ->
           model.container.refCountStateFlow.collect(::render)
         }
       }
     }
-  }
-
-  // AndroidFragment calls it once the fragment has reached onResume, so it comes after the view callbacks
-  fun onBind(viewModel: CityDetailsViewModel) {
-    this.viewModel.value = viewModel
   }
 
   override fun onDestroyView() {

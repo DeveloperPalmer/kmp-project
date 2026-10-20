@@ -17,13 +17,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kmpbaseproject.core.ui.formatPopulation
+import com.kmpbaseproject.core.ui.viewmodel.ViewModelBinder
+import com.kmpbaseproject.core.ui.viewmodel.ViewModelSlot
 import com.kmpbaseproject.feature.cities.ui.views.R
 import com.kmpbaseproject.feature.cities.ui.views.databinding.FragmentCityDetailsBinding
 import com.kmpbaseproject.uikit.view.ViewAppTheme
 import com.kmpbaseproject.uikit.view.applyPrimaryStyle
 import com.kmpbaseproject.uikit.view.applyStyle
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -64,13 +64,9 @@ private const val LIFECYCLE_TAG = "CityDetailsLifecycle"
 // childFragmentManager — у фрагмента, для вложенных фрагментов;
 // parentFragmentManager — тот, в котором лежит сам фрагмент.
 
-class CityDetailsFragmentViewBindingInflate : Fragment() {
-  // У класса намеренно нет параметров конструктора: FragmentManager пересоздаёт фрагмент по имени класса через пустой
-  // конструктор, после пересоздания Activity и после смерти процесса. Поэтому через конструктор ничего не передаётся:
-  // аргументы кладут в Bundle (arguments), а ViewModel приходит через onBind
-  private val viewModel = MutableStateFlow<CityDetailsViewModel?>(null)
-  private val boundViewModel: StateFlow<CityDetailsViewModel?> = viewModel
-
+class CityDetailsFragmentViewBindingInflate :
+  Fragment(),
+  ViewModelBinder<CityDetailsViewModel> by ViewModelSlot() {
   // Binding текущей View фрагмента: создаётся в onCreateView, обнуляется в onDestroyView
   private var currentBinding: FragmentCityDetailsBinding? = null
   private val binding: FragmentCityDetailsBinding
@@ -122,15 +118,15 @@ class CityDetailsFragmentViewBindingInflate : Fragment() {
     // Слушатели вешаются один раз на каждую View, чтобы кнопки работали ещё до первого состояния. ViewModel
     // читается в момент нажатия: после пересоздания Activity View появляется раньше, чем onBind передаст ViewModel
     binding.backButton.setOnClickListener {
-      boundViewModel.value?.navigateBack()
+      viewModel.value?.navigateBack()
     }
     binding.searchButton.setOnClickListener {
-      boundViewModel.value?.searchCityInfo()
+      viewModel.value?.searchCityInfo()
     }
     // Сбор идёт, только пока View хотя бы в STARTED, и останавливается вместе с View, а не с фрагментом
     viewLifecycleOwner.lifecycleScope.launch {
       viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        boundViewModel.filterNotNull().collectLatest { model ->
+        viewModel.filterNotNull().collectLatest { model ->
           model.container.refCountStateFlow.collect(::render)
         }
       }
@@ -154,15 +150,6 @@ class CityDetailsFragmentViewBindingInflate : Fragment() {
   override fun onResume() {
     super.onResume()
     logLifecycle("onResume")
-  }
-
-  // Не колбэк жизненного цикла, а наш метод: его вызывает AndroidFragment, получив фрагмент. По логу он приходит
-  // здесь, после onResume. Новый фрагмент к этому моменту уже добавлен и прошёл весь путь до onResume, а
-  // пересозданный AndroidFragment нашёл по id контейнера и довёл до того же состояния. Поэтому View ждут ViewModel
-  // в StateFlow, а кнопки работают и без неё
-  fun onBind(viewModel: CityDetailsViewModel) {
-    logLifecycle("onBind")
-    this.viewModel.value = viewModel
   }
 
   // Фрагмент уходит с переднего плана: приложение уходит в фон, поверх открывается другая Activity или фрагмент
