@@ -16,7 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kmpbaseproject.core.ui.formatPopulation
-import com.kmpbaseproject.feature.cities.ui.R
+import com.kmpbaseproject.feature.cities.ui.views.R
 import com.kmpbaseproject.uikit.view.ViewAppTheme
 import com.kmpbaseproject.uikit.view.applyPrimaryStyle
 import com.kmpbaseproject.uikit.view.applyStyle

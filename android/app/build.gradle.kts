@@ -42,6 +42,8 @@ android {
       initWith(getByName("release"))
       applicationIdSuffix = ".internal"
       signingConfig = signingConfigs.getByName("debug")
+      // Android libraries have only debug and release: internal takes their release, as it is built on it
+      matchingFallbacks += "release"
     }
   }
 

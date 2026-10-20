@@ -5,11 +5,6 @@ plugins {
 kotlin {
   android {
     namespace = "com.kmpbaseproject.feature.cities.ui"
-
-    // The View fragment of the city details screen has an XML layout and Android strings
-    androidResources {
-      enable = true
-    }
   }
 }
 
@@ -19,6 +14,7 @@ dependencies {
 
   commonMainImplementation(libs.paging.compose)
 
+  androidMainImplementation(projects.shared.feature.cities.uiViews)
   androidMainImplementation(libs.androidx.fragment.ktx)
   androidMainImplementation(libs.androidx.fragment.compose)
 }

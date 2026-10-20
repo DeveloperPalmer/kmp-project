@@ -46,6 +46,7 @@ include(
   ":shared:feature:cities:domain",
   ":shared:feature:cities:data",
   ":shared:feature:cities:ui",
+  ":shared:feature:cities:ui-views",
   ":shared:feature:cities:routing",
   ":shared:feature:map:domain",
   ":shared:feature:map:data",
