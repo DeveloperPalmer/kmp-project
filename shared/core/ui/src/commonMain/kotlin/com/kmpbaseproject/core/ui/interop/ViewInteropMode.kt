@@ -12,4 +12,7 @@ enum class ViewInteropMode {
 
   /** A fragment with its own XML layout on Android Views */
   FragmentView,
+
+  /** The same fragment on Android Views, whose views come from a generated ViewBinding */
+  FragmentViewBinding,
 }
