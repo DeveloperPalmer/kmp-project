@@ -33,8 +33,9 @@ class CityDetailsFragmentViewBinding : Fragment(R.layout.fragment_city_details) 
   private val boundViewModel: StateFlow<CityDetailsViewModel?> = viewModel
 
   // The binding of the current fragment view: created in onViewCreated, dropped in onDestroyView
-  private var _binding: FragmentCityDetailsBinding? = null
-  private val binding get() = _binding!!
+  private var currentBinding: FragmentCityDetailsBinding? = null
+  private val binding: FragmentCityDetailsBinding
+    get() = checkNotNull(currentBinding) { "The binding exists only while the fragment has a view" }
 
   fun onBind(viewModel: CityDetailsViewModel) {
     this.viewModel.value = viewModel
@@ -44,7 +45,7 @@ class CityDetailsFragmentViewBinding : Fragment(R.layout.fragment_city_details) 
     super.onViewCreated(view, savedInstanceState)
     // The fragment has inflated the layout already, so the binding only finds its views
     val binding = FragmentCityDetailsBinding.bind(view)
-    this._binding = binding
+    currentBinding = binding
     applyTheme(binding)
     applyWindowInsets(binding.root)
     // Wired once per view, so the buttons work before the first state. The view model is read on click:
@@ -68,7 +69,7 @@ class CityDetailsFragmentViewBinding : Fragment(R.layout.fragment_city_details) 
   override fun onDestroyView() {
     super.onDestroyView()
     // The binding holds every view of the layout: kept in the back stack, it would keep the destroyed view tree
-    _binding = null
+    currentBinding = null
   }
 
   private fun render(state: ViewState) {
