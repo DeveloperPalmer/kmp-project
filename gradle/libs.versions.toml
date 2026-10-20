@@ -39,6 +39,7 @@ compose-material3 = "1.9.0" # Material3 is versioned separately from Compose Mul
 # Android
 agp = "9.4.1"
 androidx-activity = "1.13.0"
+androidx-fragment = "1.8.9"
 androidx-work = "2.12.0"
 yandex-mapkit = "4.45.0-lite"
 
@@ -117,6 +118,8 @@ compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.r
 
 # Android
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment" }
+androidx-fragment-compose = { module = "androidx.fragment:fragment-compose", version.ref = "androidx-fragment" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 yandex-mapkit = { module = "com.yandex.android:maps.mobile", version.ref = "yandex-mapkit" }
 

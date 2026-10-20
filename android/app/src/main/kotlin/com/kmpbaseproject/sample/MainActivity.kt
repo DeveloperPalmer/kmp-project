@@ -1,15 +1,14 @@
 package com.kmpbaseproject.sample
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import com.arkivanov.decompose.defaultComponentContext
 import com.kmpbaseproject.core.component.AndroidAppComponent
 import com.kmpbaseproject.core.component.AppComponentHolder
@@ -18,10 +17,9 @@ import com.kmpbaseproject.feature.app.routing.decompose.AppFlow
 import com.kmpbaseproject.feature.app.routing.decompose.AppFlowNavigationComponent
 import com.kmpbaseproject.uikit.theme.AppTheme
 
-class MainActivity : ComponentActivity() {
-  // Without the permission foreground work still runs, only its notification is hidden.
-  // Lint sees Fragment 1.0.0 from MapKit on the compile classpath, but this is not a FragmentActivity
-  @SuppressLint("InvalidFragmentVersionForActivityResult")
+// A FragmentActivity, so that screens can host fragments through AndroidFragment
+class MainActivity : FragmentActivity() {
+  // Without the permission foreground work still runs, only its notification is hidden
   private val notificationPermissionRequest = registerForActivityResult(RequestPermission()) {}
 
   override fun onCreate(savedInstanceState: Bundle?) {

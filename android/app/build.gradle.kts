@@ -61,6 +61,8 @@ dependencies {
   implementation(projects.shared.feature.app.routing)
 
   implementation(libs.androidx.activity.compose)
+  implementation(libs.androidx.fragment.ktx)
+  implementation(libs.androidx.fragment.compose)
   implementation(libs.yandex.mapkit)
 
   testImplementation(libs.junit)
