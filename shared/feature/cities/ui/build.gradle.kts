@@ -13,4 +13,7 @@ dependencies {
   commonMainApi(projects.shared.feature.cities.domain)
 
   commonMainImplementation(libs.paging.compose)
+
+  androidMainImplementation(libs.androidx.fragment.ktx)
+  androidMainImplementation(libs.androidx.fragment.compose)
 }
