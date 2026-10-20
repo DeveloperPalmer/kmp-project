@@ -36,10 +36,6 @@ class CityDetailsFragmentView : Fragment(R.layout.fragment_city_details) {
   // The views of the current fragment view: found in onViewCreated, dropped in onDestroyView
   private var views: Views? = null
 
-  fun onBind(viewModel: CityDetailsViewModel) {
-    this.viewModel.value = viewModel
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     val views = Views(view)
@@ -62,6 +58,11 @@ class CityDetailsFragmentView : Fragment(R.layout.fragment_city_details) {
         }
       }
     }
+  }
+
+  // AndroidFragment calls it once the fragment has reached onResume, so it comes after the view callbacks
+  fun onBind(viewModel: CityDetailsViewModel) {
+    this.viewModel.value = viewModel
   }
 
   override fun onDestroyView() {

@@ -37,10 +37,6 @@ class CityDetailsFragmentViewBinding : Fragment(R.layout.fragment_city_details) 
   private val binding: FragmentCityDetailsBinding
     get() = checkNotNull(currentBinding) { "The binding exists only while the fragment has a view" }
 
-  fun onBind(viewModel: CityDetailsViewModel) {
-    this.viewModel.value = viewModel
-  }
-
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     // The fragment has inflated the layout already, so the binding only finds its views
@@ -64,6 +60,11 @@ class CityDetailsFragmentViewBinding : Fragment(R.layout.fragment_city_details) 
         }
       }
     }
+  }
+
+  // AndroidFragment calls it once the fragment has reached onResume, so it comes after the view callbacks
+  fun onBind(viewModel: CityDetailsViewModel) {
+    this.viewModel.value = viewModel
   }
 
   override fun onDestroyView() {

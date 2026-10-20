@@ -43,14 +43,27 @@ private const val LIFECYCLE_TAG = "CityDetailsLifecycle"
  * привязывается к жизненному циклу View.
  *
  * Порядок вызовов, снятый с эмулятора:
- * - открытие: onAttach → onCreate → onCreateView → onViewCreated → onViewStateRestored → onStart → onResume → onBind;
- * - кнопка Home: onPause → onStop → onSaveInstanceState; возврат в приложение: onStart → onResume;
- * - поворот: onPause → onStop → onSaveInstanceState дважды → onDestroyView → onDestroy → onDetach, затем новый
+ * - а) открытие: onAttach → onCreate → onCreateView → onViewCreated → onViewStateRestored → onStart → onResume → onBind;
+ * - б) кнопка Home: onPause → onStop → onSaveInstanceState; возврат в приложение: onStart → onResume;
+ * - с) поворот: onPause → onStop → onSaveInstanceState дважды → onDestroyView → onDestroy → onDetach, затем новый
  *   экземпляр с тем же who проходит весь путь открытия;
- * - «назад»: onSaveInstanceState → onPause → onStop → onDestroyView → onDestroy → onDetach;
- * - возврат после смерти процесса: onAttach → onCreate → onDestroy → onDetach, восстановленный фрагмент сразу
+ * - д) «назад»: onSaveInstanceState → onPause → onStop → onDestroyView → onDestroy → onDetach;
+ * - е) возврат после смерти процесса: onAttach → onCreate → onDestroy → onDetach, восстановленный фрагмент сразу
  *   удаляет MainActivity, потому что стек экранов начинается заново
  */
+
+// Назначение — для собеседования
+
+// FragmentManager — это объект, который хранит фрагменты одного хоста (Activity или родительского фрагмента)
+// и управляет ими: добавляет и удаляет их транзакциями, ведёт их по жизненному циклу вместе с хостом, держит back stack,
+// а при пересоздании сохраняет и восстанавливает фрагменты.
+
+// Какие бывают менеджеры:
+
+// supportFragmentManager — у Activity;
+// childFragmentManager — у фрагмента, для вложенных фрагментов;
+// parentFragmentManager — тот, в котором лежит сам фрагмент.
+
 class CityDetailsFragmentViewBindingInflate : Fragment() {
   // У класса намеренно нет параметров конструктора: FragmentManager пересоздаёт фрагмент по имени класса через пустой
   // конструктор, после пересоздания Activity и после смерти процесса. Поэтому через конструктор ничего не передаётся:
@@ -62,13 +75,6 @@ class CityDetailsFragmentViewBindingInflate : Fragment() {
   private var currentBinding: FragmentCityDetailsBinding? = null
   private val binding: FragmentCityDetailsBinding
     get() = checkNotNull(currentBinding) { "The binding exists only while the fragment has a view" }
-
-  // Вызывает AndroidFragment, получив фрагмент. Новый фрагмент к этому моменту уже добавлен и прошёл весь путь
-  // до onResume, пересозданный найден по id контейнера. Поэтому View ждут ViewModel в StateFlow
-  fun onBind(viewModel: CityDetailsViewModel) {
-    logLifecycle("onBind")
-    this.viewModel.value = viewModel
-  }
 
   // Фрагмент прикреплён к хосту, то есть к Activity и её FragmentManager: с этого момента работают requireContext()
   // и requireActivity()
@@ -87,6 +93,9 @@ class CityDetailsFragmentViewBindingInflate : Fragment() {
   // Создаёт View фрагмента и больше ничего: настраивают View в onViewCreated
   override fun onCreateView(
     inflater: LayoutInflater,
+    // Контейнер нужен ради атрибутов layout_* у корня разметки: они описывают, как View встанет в родителе,
+    // View не расставляет себя сама, её размещает родитель. ViewGroup в inflate нужен,
+    // чтобы атрибуты layout_* у корня разметки не потерялись.
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
@@ -147,6 +156,15 @@ class CityDetailsFragmentViewBindingInflate : Fragment() {
     logLifecycle("onResume")
   }
 
+  // Не колбэк жизненного цикла, а наш метод: его вызывает AndroidFragment, получив фрагмент. По логу он приходит
+  // здесь, после onResume. Новый фрагмент к этому моменту уже добавлен и прошёл весь путь до onResume, а
+  // пересозданный AndroidFragment нашёл по id контейнера и довёл до того же состояния. Поэтому View ждут ViewModel
+  // в StateFlow, а кнопки работают и без неё
+  fun onBind(viewModel: CityDetailsViewModel) {
+    logLifecycle("onBind")
+    this.viewModel.value = viewModel
+  }
+
   // Фрагмент уходит с переднего плана: приложение уходит в фон, поверх открывается другая Activity или фрагмент
   // удаляют. При этом он может оставаться видимым, например в режиме нескольких окон
   override fun onPause() {
@@ -170,11 +188,12 @@ class CityDetailsFragmentViewBindingInflate : Fragment() {
     logLifecycle("onSaveInstanceState")
   }
 
-  // View уничтожена, а фрагмент ещё нет: он либо ждёт в back stack новую View, либо следом уничтожается.
-  // Корутины viewLifecycleOwner к этому моменту отменены
+  // View уничтожена, а фрагмент ещё нет: Fragment либо ждёт в back stack новую View, либо следом уничтожается.
+  // viewLifecycleOwner к этому моменту отменен
   override fun onDestroyView() {
     super.onDestroyView()
     logLifecycle("onDestroyView")
+    // Binding также зануляется
     // Binding держит все View разметки: в back stack он удерживал бы уже уничтоженное дерево View
     currentBinding = null
   }

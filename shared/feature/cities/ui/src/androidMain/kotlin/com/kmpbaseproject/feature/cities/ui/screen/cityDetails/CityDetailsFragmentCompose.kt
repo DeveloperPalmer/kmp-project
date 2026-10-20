@@ -20,10 +20,6 @@ class CityDetailsFragmentCompose : Fragment() {
   private val viewModel = MutableStateFlow<CityDetailsViewModel?>(null)
   private val boundViewModel: StateFlow<CityDetailsViewModel?> = viewModel
 
-  fun onBind(viewModel: CityDetailsViewModel) {
-    this.viewModel.value = viewModel
-  }
-
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -43,5 +39,10 @@ class CityDetailsFragmentCompose : Fragment() {
         }
       }
     }
+  }
+
+  // AndroidFragment calls it once the fragment has reached onResume, so it comes after the view callbacks
+  fun onBind(viewModel: CityDetailsViewModel) {
+    this.viewModel.value = viewModel
   }
 }
