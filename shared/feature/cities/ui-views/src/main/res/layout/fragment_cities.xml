@@ -20,7 +20,8 @@
     </FrameLayout>
 
     <!-- Список забирает всю оставшуюся высоту. Отступ 16dp по бокам — как contentPadding у LazyColumn: строки
-      отступают от краёв экрана. LayoutManager задаётся в коде, чтобы было видно, кто расставляет строки -->
+      отступают от краёв экрана. app:layoutManager — RecyclerView сам создаст LinearLayoutManager по имени класса,
+      когда разметку надувают: без LayoutManager строки некому расставить -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cities_list"
         android:layout_width="match_parent"
