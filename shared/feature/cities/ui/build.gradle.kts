@@ -14,7 +14,8 @@ dependencies {
 
   commonMainImplementation(libs.paging.compose)
 
-  androidMainImplementation(projects.shared.feature.cities.uiViews)
+  androidMainImplementation(libs.paging.runtime)
   androidMainImplementation(libs.androidx.fragment.ktx)
   androidMainImplementation(libs.androidx.fragment.compose)
+  androidMainImplementation(projects.shared.feature.cities.uiViews)
 }

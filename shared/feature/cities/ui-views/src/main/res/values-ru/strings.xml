@@ -7,4 +7,6 @@
   <string name="city_details_population">Население</string>
   <string name="city_details_population_value">%1$s чел</string>
   <string name="city_details_search">Поиск информации о городе</string>
+
+  <string name="cities_list_title">Список городов</string>
 </resources>

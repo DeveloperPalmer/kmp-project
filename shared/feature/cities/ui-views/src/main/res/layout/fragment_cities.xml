@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Экран списка городов. Размеры повторяют компоненты дизайн-системы, цвета и стили текста задаются в коде через
+  ViewAppTheme -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <!-- TopAppBar: заголовок по центру всей ширины -->
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="52dp">
+
+    <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:text="@string/cities_list_title" />
+  </FrameLayout>
+
+  <!-- Список забирает всю оставшуюся высоту. Отступ 16dp по бокам — как contentPadding у LazyColumn: строки
+    отступают от краёв экрана. LayoutManager задаётся в коде, чтобы было видно, кто расставляет строки -->
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/cities_list"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:paddingHorizontal="16dp" />
+</LinearLayout>

@@ -40,6 +40,7 @@ compose-material3 = "1.9.0" # Material3 is versioned separately from Compose Mul
 agp = "9.4.1"
 androidx-activity = "1.13.0"
 androidx-fragment = "1.8.9"
+androidx-recyclerview = "1.4.0"
 androidx-work = "2.12.0"
 yandex-mapkit = "4.45.0-lite"
 
@@ -112,6 +113,7 @@ compose-material3 = { module = "org.jetbrains.compose.material3:material3", vers
 compose-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
 paging-common = { module = "androidx.paging:paging-common", version.ref = "paging" }
 paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
 compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
@@ -120,6 +122,7 @@ compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.r
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment" }
 androidx-fragment-compose = { module = "androidx.fragment:fragment-compose", version.ref = "androidx-fragment" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 yandex-mapkit = { module = "com.yandex.android:maps.mobile", version.ref = "yandex-mapkit" }
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- HorizontalDivider of the Compose list: 1dp between the cities -->
+  <dimen name="cities_divider_thickness">1dp</dimen>
+</resources>

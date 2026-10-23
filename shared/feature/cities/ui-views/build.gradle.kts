@@ -18,3 +18,9 @@ android {
     viewBinding = true
   }
 }
+
+dependencies {
+  // The binding of a layout with a RecyclerView has a field of that type, so the modules using it need the class too
+  api(libs.androidx.recyclerview)
+  implementation(projects.shared.core.uikit)
+}

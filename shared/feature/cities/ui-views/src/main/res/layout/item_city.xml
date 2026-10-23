@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Одна строка списка: значок и название города. Разделитель между строками рисует ItemDecoration, а не эта
+  разметка: в Compose-версии его рисует сама строка, кроме первой. layout_width="match_parent" корня сработает, только
+  если адаптер передаст parent в inflate: иначе RecyclerView даст строке wrap_content -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center_vertical"
+  android:orientation="horizontal"
+  android:paddingVertical="12dp">
+
+  <!-- Значок только украшает строку: смысл несёт название, поэтому TalkBack его пропускает -->
+  <ImageView
+    android:id="@+id/pin"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_marginEnd="12dp"
+    android:importantForAccessibility="no"
+    android:src="@drawable/ic_pin_24" />
+
+  <!-- includeFontPadding="false": без него TextView добавляет над и под текстом запас шрифта, и строка выходит
+    выше, чем в Compose -->
+  <TextView
+    android:id="@+id/title"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:ellipsize="end"
+    android:includeFontPadding="false"
+    android:maxLines="1"
+    android:paddingVertical="4dp" />
+</LinearLayout>
