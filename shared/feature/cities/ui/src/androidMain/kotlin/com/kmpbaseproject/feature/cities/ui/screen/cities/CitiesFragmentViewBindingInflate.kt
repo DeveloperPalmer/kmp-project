@@ -18,6 +18,7 @@ import com.kmpbaseproject.core.ui.viewmodel.ViewModelSlot
 import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CitiesAdapter
 import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CityDividerDecoration
 import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CityItemViewHolder
+import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.withGroupHeaders
 import com.kmpbaseproject.feature.cities.ui.views.databinding.FragmentCitiesBinding
 import com.kmpbaseproject.resources.R
 import com.kmpbaseproject.uikit.view.ViewAppTheme
@@ -84,7 +85,8 @@ class CitiesFragmentViewBindingInflate :
               it.collectLatest { pagingCity ->
                 // submitData приостанавливается, пока эти PagingData актуальны, поэтому collectLatest: новые PagingData
                 // после нового поиска отменяют показ старых
-                citiesAdapter.submitData(pagingCity)
+                // Города с заголовками групп: заголовки вставляет withGroupHeaders
+                citiesAdapter.submitData(pagingCity.withGroupHeaders())
               }
             }
         }

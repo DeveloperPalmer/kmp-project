@@ -9,4 +9,9 @@
   <string name="city_details_search">Поиск информации о городе</string>
 
   <string name="cities_list_title">Список городов</string>
+  <string name="cities_group_over_20m">Больше 20 млн</string>
+  <string name="cities_group_10_20m">10–20 млн</string>
+  <string name="cities_group_5_10m">5–10 млн</string>
+  <string name="cities_group_1_5m">1–5 млн</string>
+  <string name="cities_group_under_1m">Меньше 1 млн</string>
 </resources>

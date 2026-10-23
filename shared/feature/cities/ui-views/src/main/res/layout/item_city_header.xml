@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Заголовок группы городов — второй вид строки списка: только текст, без значка и без нажатия. У него своя
+  разметка, поэтому и свой viewType с отдельным ViewHolder. accessibilityHeading — TalkBack объявит его заголовком,
+  и по заголовкам можно перескакивать между группами -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/title"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:accessibilityHeading="true"
+  android:includeFontPadding="false"
+  android:paddingTop="16dp"
+  android:paddingBottom="4dp"
+  tools:targetApi="28" />

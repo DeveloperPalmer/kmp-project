@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.roundToInt
 
 /**
- * Линия между городами, как HorizontalDivider в Compose-версии: над каждой строкой, кроме первой.
+ * Линия между городами, как HorizontalDivider в Compose-версии: между двумя городами подряд. Над заголовком группы
+ * и сразу под ним линии нет: группы и так разделяет заголовок.
  *
  * ItemDecoration украшает список, не трогая разметку строк. getItemOffsets оставляет вокруг строки место,
  * onDraw рисует на Canvas самого RecyclerView под строками, а onDrawOver — поверх них
@@ -28,8 +29,8 @@ internal class CityDividerDecoration(
     parent: RecyclerView,
     state: RecyclerView.State
   ) {
-    // Место под линию сверху у всех строк, кроме первой. Позиция берётся в адаптере, а не среди видимых детей
-    if (parent.getChildAdapterPosition(view) > 0) {
+    // Место под линию сверху — только у строк, над которыми линия будет
+    if (hasDividerAbove(view, parent)) {
       outRect.top = thickness
     }
   }
@@ -38,8 +39,7 @@ internal class CityDividerDecoration(
     // Детей у RecyclerView столько, сколько строк сейчас на экране, а не сколько городов в списке
     for (index in 0 until parent.childCount) {
       val child = parent.getChildAt(index)
-      // NO_POSITION (-1) — строка уже удалена и доигрывает анимацию
-      if (parent.getChildAdapterPosition(child) <= 0) continue
+      if (!hasDividerAbove(child, parent)) continue
       // Границы строки вместе с отступом, который оставил getItemOffsets; translationY — сдвиг анимации
       parent.getDecoratedBoundsWithMargins(child, bounds)
       val top = bounds.top + child.translationY.roundToInt()
@@ -51,5 +51,19 @@ internal class CityDividerDecoration(
         paint,
       )
     }
+  }
+
+  // Линия над строкой — только если и она, и строка над ней — города. Позиция и адаптер берутся у ViewHolder:
+  // bindingAdapterPosition — позиция в своём адаптере. Она останется верной, даже если список соберут из нескольких
+  // адаптеров через ConcatAdapter, а getChildAdapterPosition вернул бы позицию во всём списке
+  private fun hasDividerAbove(view: View, parent: RecyclerView): Boolean {
+    val holder = parent.getChildViewHolder(view)
+    if (holder !is CityItemViewHolder) {
+      return false
+    }
+    val adapter = holder.bindingAdapter as? CitiesAdapter ?: return false
+    // NO_POSITION (-1) — строка уже удалена и доигрывает анимацию
+    val position = holder.bindingAdapterPosition
+    return position > 0 && adapter.isCityAt(position - 1)
   }
 }

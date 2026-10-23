@@ -11,4 +11,9 @@
   <string name="city_details_search">Search city info</string>
 
   <string name="cities_list_title">City list</string>
+  <string name="cities_group_over_20m">Over 20 million</string>
+  <string name="cities_group_10_20m">10–20 million</string>
+  <string name="cities_group_5_10m">5–10 million</string>
+  <string name="cities_group_1_5m">1–5 million</string>
+  <string name="cities_group_under_1m">Under 1 million</string>
 </resources>
