@@ -20,19 +20,19 @@ import com.kmpbaseproject.uikit.view.ViewAppTheme
 internal class CitiesAdapter(
   private val theme: ViewAppTheme,
   private val onCityClick: (City) -> Unit,
-) : PagingDataAdapter<City, CityViewHolder>(CityDiffCallback) {
+) : PagingDataAdapter<City, CityItemViewHolder>(CityDiffCallback) {
   // Вызывается, только когда в пуле нет свободного держателя:
   // создать View строки и держатель для неё
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityItemViewHolder {
     // parent нужен ради layout_* корня строки, иначе пропадёт match_parent. false — строку в список добавит
     // сам RecyclerView
     val binding = ItemCityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    return CityViewHolder(binding, theme, onCityClick)
+    return CityItemViewHolder(binding, theme, onCityClick)
   }
 
   // Вызывается при каждом появлении строки на экране, в том числе для переиспользованного держателя. Здесь только
   // заполняют держатель данными: этот метод вызывается постоянно при прокрутке, и тяжёлая работа здесь даёт рывки
-  override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: CityItemViewHolder, position: Int) {
     // getItem ещё и сообщает Paging, какую позицию видит пользователь: по ней он решает, когда грузить дальше.
     // null бывает только у placeholder'ов, а они выключены в PagingConfig
     val city = getItem(position) ?: return

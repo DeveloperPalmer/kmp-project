@@ -14,7 +14,7 @@ import com.kmpbaseproject.uikit.view.applyStyle
  * и дальше только переиспользует их: строка, ушедшая за край при прокрутке, попадает в пул и получает через [bind]
  * данные другого города
  */
-internal class CityViewHolder(
+internal class CityItemViewHolder(
   private val binding: ItemCityBinding,
   theme: ViewAppTheme,
   onClick: (City) -> Unit,

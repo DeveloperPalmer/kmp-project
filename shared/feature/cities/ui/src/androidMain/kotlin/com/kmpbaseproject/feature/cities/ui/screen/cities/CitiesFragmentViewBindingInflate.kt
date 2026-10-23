@@ -17,7 +17,7 @@ import com.kmpbaseproject.core.ui.viewmodel.ViewModelBinder
 import com.kmpbaseproject.core.ui.viewmodel.ViewModelSlot
 import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CitiesAdapter
 import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CityDividerDecoration
-import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CityViewHolder
+import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CityItemViewHolder
 import com.kmpbaseproject.feature.cities.ui.views.databinding.FragmentCitiesBinding
 import com.kmpbaseproject.resources.R
 import com.kmpbaseproject.uikit.view.ViewAppTheme
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
  * RecyclerView собирается из трёх частей:
  * - LayoutManager расставляет строки и решает, какие из них видны: вертикальный список, сетка, горизонтальная лента;
  * - Adapter даёт данные: сколько строк, как создать строку и как заполнить её — здесь [CitiesAdapter];
- * - ViewHolder держит View одной строки, и RecyclerView переиспользует его для других данных — [CityViewHolder].
+ * - ViewHolder держит View одной строки, и RecyclerView переиспользует его для других данных — [CityItemViewHolder].
  *
  * А ItemDecoration рисует между строками то, что не входит в их разметку, — здесь [CityDividerDecoration]
  */
