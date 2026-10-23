@@ -16,7 +16,7 @@ countQuery:
 SELECT count(*) FROM CitySearchResult WHERE searchQuery = ?;
 
 getCities:
-SELECT City.id, City.name, City.country
+SELECT City.id, City.name, City.country, City.pop
 FROM CitySearchResult
 JOIN City ON City.id = CitySearchResult.cityId
 WHERE CitySearchResult.searchQuery = :searchQuery
@@ -24,7 +24,7 @@ ORDER BY CitySearchResult.position
 LIMIT :limit OFFSET :offset;
 
 getAllCities:
-SELECT City.id, City.name, City.country
+SELECT City.id, City.name, City.country, City.pop
 FROM CitySearchResult
 JOIN City ON City.id = CitySearchResult.cityId
 WHERE CitySearchResult.searchQuery = :searchQuery
