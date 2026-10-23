@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.kmpbaseproject.core.domain.mapDistinctChanges
 import com.kmpbaseproject.core.ui.viewmodel.ViewModelBinder
 import com.kmpbaseproject.core.ui.viewmodel.ViewModelSlot
@@ -81,10 +80,12 @@ class CitiesFragmentViewBindingInflate :
         viewModel.filterNotNull().collectLatest { model ->
           model.container.refCountStateFlow
             .mapDistinctChanges { state -> state.cities }
-            .collectLatest { cities ->
-              // submitData приостанавливается, пока эти PagingData актуальны, поэтому collectLatest: новые PagingData
-              // после нового поиска отменяют показ старых
-              cities.collectLatest(citiesAdapter::submitData)
+            .collectLatest {
+              it.collectLatest { pagingCity ->
+                // submitData приостанавливается, пока эти PagingData актуальны, поэтому collectLatest: новые PagingData
+                // после нового поиска отменяют показ старых
+                citiesAdapter.submitData(pagingCity)
+              }
             }
         }
       }

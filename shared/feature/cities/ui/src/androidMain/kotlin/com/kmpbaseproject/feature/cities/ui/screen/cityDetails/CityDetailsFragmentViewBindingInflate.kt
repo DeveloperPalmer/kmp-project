@@ -43,27 +43,26 @@ private const val LIFECYCLE_TAG = "CityDetailsLifecycle"
  * привязывается к жизненному циклу View.
  *
  * Порядок вызовов, снятый с эмулятора:
- * - а) открытие: onAttach → onCreate → onCreateView → onViewCreated → onViewStateRestored → onStart → onResume → onBind;
+ * - а) открытие: onAttach → onCreate → onCreateView → onViewCreated → onViewStateRestored → onStart → onResume
+ *   → onBind;
  * - б) кнопка Home: onPause → onStop → onSaveInstanceState; возврат в приложение: onStart → onResume;
  * - с) поворот: onPause → onStop → onSaveInstanceState дважды → onDestroyView → onDestroy → onDetach, затем новый
  *   экземпляр с тем же who проходит весь путь открытия;
  * - д) «назад»: onSaveInstanceState → onPause → onStop → onDestroyView → onDestroy → onDetach;
  * - е) возврат после смерти процесса: onAttach → onCreate → onDestroy → onDetach, восстановленный фрагмент сразу
  *   удаляет MainActivity, потому что стек экранов начинается заново
+ *
+ * Назначение — для собеседования.
+ *
+ * FragmentManager — это объект, который хранит фрагменты одного хоста (Activity или родительского фрагмента)
+ * и управляет ими: добавляет и удаляет их транзакциями, ведёт их по жизненному циклу вместе с хостом,
+ * держит back stack, а при пересоздании сохраняет и восстанавливает фрагменты.
+ *
+ * Какие бывают менеджеры:
+ * - supportFragmentManager — у Activity;
+ * - childFragmentManager — у фрагмента, для вложенных фрагментов;
+ * - parentFragmentManager — тот, в котором лежит сам фрагмент.
  */
-
-// Назначение — для собеседования
-
-// FragmentManager — это объект, который хранит фрагменты одного хоста (Activity или родительского фрагмента)
-// и управляет ими: добавляет и удаляет их транзакциями, ведёт их по жизненному циклу вместе с хостом, держит back stack,
-// а при пересоздании сохраняет и восстанавливает фрагменты.
-
-// Какие бывают менеджеры:
-
-// supportFragmentManager — у Activity;
-// childFragmentManager — у фрагмента, для вложенных фрагментов;
-// parentFragmentManager — тот, в котором лежит сам фрагмент.
-
 class CityDetailsFragmentViewBindingInflate :
   Fragment(),
   ViewModelBinder<CityDetailsViewModel> by ViewModelSlot() {

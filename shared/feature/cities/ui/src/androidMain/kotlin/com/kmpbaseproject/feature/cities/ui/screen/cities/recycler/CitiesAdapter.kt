@@ -21,7 +21,8 @@ internal class CitiesAdapter(
   private val theme: ViewAppTheme,
   private val onCityClick: (City) -> Unit,
 ) : PagingDataAdapter<City, CityViewHolder>(CityDiffCallback) {
-  // Вызывается, только когда в пуле нет свободного держателя: создать View строки и держатель для неё
+  // Вызывается, только когда в пуле нет свободного держателя:
+  // создать View строки и держатель для неё
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
     // parent нужен ради layout_* корня строки, иначе пропадёт match_parent. false — строку в список добавит
     // сам RecyclerView
