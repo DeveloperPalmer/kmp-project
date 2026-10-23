@@ -1,4 +1,4 @@
-package com.kmpbaseproject.feature.cities.ui.screen.cities
+package com.kmpbaseproject.feature.cities.ui.screen.cities.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -39,11 +39,17 @@ internal class CitiesAdapter(
   }
 }
 
-// DiffUtil сравнивает старый и новый списки в два шага. areItemsTheSame — тот же ли это элемент: по нему DiffUtil
-// понимает, что строка сдвинулась, а не удалена и вставлена заново. areContentsTheSame — изменилось ли содержимое
-// того же элемента: если да, строку перепривяжут
+// DiffUtil сравнивает старый и новый списки в два шага.
 private object CityDiffCallback : DiffUtil.ItemCallback<City>() {
-  override fun areItemsTheSame(oldItem: City, newItem: City): Boolean = oldItem.id == newItem.id
+  // areItemsTheSame — тот же ли это элемент: по нему DiffUtil понимает,
+  // что строка сдвинулась, а не удалена и вставлена заново.
+  override fun areItemsTheSame(oldItem: City, newItem: City): Boolean {
+    return oldItem.id == newItem.id
+  }
 
-  override fun areContentsTheSame(oldItem: City, newItem: City): Boolean = oldItem == newItem
+  // areContentsTheSame — изменилось ли содержимое того же элемента:
+  // если да, строку перепривяжут
+  override fun areContentsTheSame(oldItem: City, newItem: City): Boolean {
+    return oldItem == newItem
+  }
 }

@@ -13,16 +13,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kmpbaseproject.core.domain.mapDistinctChanges
 import com.kmpbaseproject.core.ui.viewmodel.ViewModelBinder
 import com.kmpbaseproject.core.ui.viewmodel.ViewModelSlot
-import com.kmpbaseproject.feature.cities.ui.views.R
+import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CitiesAdapter
+import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CityDividerDecoration
+import com.kmpbaseproject.feature.cities.ui.screen.cities.recycler.CityViewHolder
 import com.kmpbaseproject.feature.cities.ui.views.databinding.FragmentCitiesBinding
+import com.kmpbaseproject.resources.R
 import com.kmpbaseproject.uikit.view.ViewAppTheme
 import com.kmpbaseproject.uikit.view.applyStyle
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -44,11 +46,7 @@ class CitiesFragmentViewBindingInflate :
   private val binding: FragmentCitiesBinding
     get() = checkNotNull(currentBinding) { "The binding exists only while the fragment has a view" }
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
     currentBinding = FragmentCitiesBinding.inflate(inflater, container, false)
     return binding.root
   }
@@ -58,23 +56,22 @@ class CitiesFragmentViewBindingInflate :
     val theme = ViewAppTheme(requireContext())
     applyTheme(theme)
     applyWindowInsets(binding.root)
-
     // Адаптер живёт столько же, сколько View, поэтому он локальный, а не поле фрагмента. RecyclerView подписывается
     // на адаптер, и адаптер в поле держал бы через эту подписку уничтоженный RecyclerView всё время, пока фрагмент
-    // без View лежит в back stack. Город читается в момент нажатия: ViewModel могла прийти позже View
-    val adapter = CitiesAdapter(theme) { city ->
-      viewModel.value?.openDetails(city.id)
-    }
+    // без View лежит в back stack. Локальная переменная нужна и сборщику ниже: свойство RecyclerView.adapter имеет
+    // тип RecyclerView.Adapter<*>, и submitData у него нет. Город читается в момент нажатия: ViewModel могла прийти
+    // позже View
+    val citiesAdapter = CitiesAdapter(
+      theme = theme,
+      onCityClick = { viewModel.value?.openDetails(it.id) }
+    )
     binding.citiesList.apply {
-      // Без LayoutManager RecyclerView ничего не покажет: расставлять строки умеет только он
-      layoutManager = LinearLayoutManager(requireContext())
-      addItemDecoration(
-        CityDividerDecoration(
-          color = theme.colors.divider.primary.toArgb(),
-          thickness = resources.getDimensionPixelSize(R.dimen.cities_divider_thickness),
-        ),
+      adapter = citiesAdapter
+      val itemDecoration = CityDividerDecoration(
+        color = theme.colors.divider.primary.toArgb(),
+        thickness = resources.getDimensionPixelSize(R.dimen.cities_divider_thickness),
       )
-      this.adapter = adapter
+      addItemDecoration(itemDecoration)
     }
 
     // Сбор идёт, только пока View хотя бы в STARTED. PagingData закешированы в CitiesModel через cachedIn,
@@ -83,12 +80,11 @@ class CitiesFragmentViewBindingInflate :
       viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
         viewModel.filterNotNull().collectLatest { model ->
           model.container.refCountStateFlow
-            .map { state -> state.cities }
-            .distinctUntilChanged()
+            .mapDistinctChanges { state -> state.cities }
             .collectLatest { cities ->
               // submitData приостанавливается, пока эти PagingData актуальны, поэтому collectLatest: новые PagingData
               // после нового поиска отменяют показ старых
-              cities.collectLatest(adapter::submitData)
+              cities.collectLatest(citiesAdapter::submitData)
             }
         }
       }

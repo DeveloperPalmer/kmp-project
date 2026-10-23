@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import com.kmpbaseproject.resources.R as ResourcesR
 
 /**
  * The screen on Android Views: an XML layout whose views are found with findViewById
@@ -78,7 +79,10 @@ class CityDetailsFragmentView : Fragment(R.layout.fragment_city_details) {
     if (city == null) return
     views.city.text = city.name
     views.country.text = city.country
-    views.population.text = getString(R.string.city_details_population_value, formatPopulation(city.population))
+    views.population.text = getString(
+      ResourcesR.string.city_details_population_value,
+      formatPopulation(city.population),
+    )
   }
 
   // Views cannot read AppTheme, so the same design tokens come through ViewAppTheme. The theme is applied

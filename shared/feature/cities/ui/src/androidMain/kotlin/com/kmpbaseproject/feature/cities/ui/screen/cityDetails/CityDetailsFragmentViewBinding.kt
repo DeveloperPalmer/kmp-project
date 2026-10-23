@@ -23,6 +23,7 @@ import com.kmpbaseproject.uikit.view.applyStyle
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
+import com.kmpbaseproject.resources.R as ResourcesR
 
 /**
  * The screen on Android Views with the same XML layout as [CityDetailsFragmentView], whose views come from the
@@ -74,7 +75,7 @@ class CityDetailsFragmentViewBinding :
     binding.cityValue.text = city.name
     binding.countryValue.text = city.country
     binding.populationValue.text = getString(
-      R.string.city_details_population_value,
+      ResourcesR.string.city_details_population_value,
       formatPopulation(city.population),
     )
   }

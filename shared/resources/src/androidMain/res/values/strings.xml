@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Strings of the View fragments of the cities feature; the Compose UI uses the shared Compose resources -->
+<!-- Android strings for the View screens. Views read only compiled Android resources, not the Compose resources
+  in composeResources, so the texts they show are repeated here next to their Compose originals -->
 <resources>
   <string name="city_details_title">City information</string>
   <string name="city_details_back">Back</string>

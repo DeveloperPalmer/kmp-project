@@ -1,4 +1,4 @@
-package com.kmpbaseproject.feature.cities.ui.screen.cities
+package com.kmpbaseproject.feature.cities.ui.screen.cities.recycler
 
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -22,7 +22,12 @@ internal class CityDividerDecoration(
   // Переиспользуемый прямоугольник: onDraw вызывается на каждом кадре прокрутки, и создавать объекты в нём нельзя
   private val bounds = Rect()
 
-  override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+  override fun getItemOffsets(
+    outRect: Rect,
+    view: View,
+    parent: RecyclerView,
+    state: RecyclerView.State
+  ) {
     // Место под линию сверху у всех строк, кроме первой. Позиция берётся в адаптере, а не среди видимых детей
     if (parent.getChildAdapterPosition(view) > 0) {
       outRect.top = thickness

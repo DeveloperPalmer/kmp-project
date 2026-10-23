@@ -1,4 +1,4 @@
-package com.kmpbaseproject.feature.cities.ui.screen.cities
+package com.kmpbaseproject.feature.cities.ui.screen.cities.recycler
 
 import android.content.res.ColorStateList
 import androidx.compose.ui.graphics.toArgb
@@ -24,20 +24,21 @@ internal class CityViewHolder(
 
   init {
     // Всё, что не зависит от данных, делается один раз при создании держателя, а не в каждом bind
-    binding.title.applyStyle(theme.typography.subtitle1, theme.colors.text.primary)
-    binding.pin.imageTintList = ColorStateList.valueOf(theme.colors.icon.secondary.toArgb())
+    binding.title.applyStyle(
+      theme.typography.subtitle1,
+      theme.colors.text.primary
+    )
+    binding.pin.imageTintList = ColorStateList.valueOf(
+      theme.colors.icon.secondary.toArgb()
+    )
     // Слушатель тоже один на держателя: в bind он создавался бы заново при каждом появлении строки. Город берётся
     // в момент нажатия. Захватить position из onBindViewHolder было бы ошибкой: после вставки или удаления строк
     // выше он устаревает. Если нужна позиция, её читают в момент нажатия через bindingAdapterPosition
-    binding.root.setOnClickListener {
-      city?.let(onClick)
-    }
+    binding.root.setOnClickListener { city?.let(onClick) }
   }
 
-  // Привязка выставляет все поля, которые зависят от данных: иначе переиспользованная строка покажет остатки
-  // прошлого города
-  fun bind(city: City) {
-    this.city = city
-    binding.title.text = city.title
+  fun bind(item: City) {
+    city = item
+    binding.title.text = item.title
   }
 }

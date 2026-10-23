@@ -19,8 +19,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.kmpbaseproject.core.ui.formatPopulation
 import com.kmpbaseproject.core.ui.viewmodel.ViewModelBinder
 import com.kmpbaseproject.core.ui.viewmodel.ViewModelSlot
-import com.kmpbaseproject.feature.cities.ui.views.R
 import com.kmpbaseproject.feature.cities.ui.views.databinding.FragmentCityDetailsBinding
+import com.kmpbaseproject.resources.R
 import com.kmpbaseproject.uikit.view.ViewAppTheme
 import com.kmpbaseproject.uikit.view.applyPrimaryStyle
 import com.kmpbaseproject.uikit.view.applyStyle
