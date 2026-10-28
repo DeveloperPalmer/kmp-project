@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.resources"
+    namespace = "com.kmpproject.resources"
     androidResources {
       enable = true
     }
@@ -13,6 +13,6 @@ kotlin {
 
 compose.resources {
   publicResClass = true
-  packageOfResClass = "com.kmpbaseproject.resources"
+  packageOfResClass = "com.kmpproject.resources"
   generateResClass = always
 }

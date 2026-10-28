@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.cities.domain"
+    namespace = "com.kmpproject.feature.cities.domain"
   }
 }
 

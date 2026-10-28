@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.core.ui"
+    namespace = "com.kmpproject.core.ui"
   }
 }
 

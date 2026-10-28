@@ -25,7 +25,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "kmp-base-project"
+rootProject.name = "kmp-project"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

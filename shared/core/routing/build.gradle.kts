@@ -5,7 +5,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.core.routing"
+    namespace = "com.kmpproject.core.routing"
     withHostTest {}
   }
 

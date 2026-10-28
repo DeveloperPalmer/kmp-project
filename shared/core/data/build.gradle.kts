@@ -8,14 +8,14 @@ sqldelight {
   databases {
     create("CitiesDatabase") {
       srcDirs("src/commonMain/databases/cities")
-      packageName.set("com.kmpbaseproject.core.data.cities")
+      packageName.set("com.kmpproject.core.data.cities")
     }
   }
 }
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.core.data"
+    namespace = "com.kmpproject.core.data"
   }
 
   sourceSets {

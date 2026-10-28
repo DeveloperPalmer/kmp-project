@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-  namespace = "com.kmpbaseproject.feature.cities.ui.views"
+  namespace = "com.kmpproject.feature.cities.ui.views"
   compileSdk {
     version = release(37)
   }

@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-  namespace = "com.kmpbaseproject.sample"
+  namespace = "com.kmpproject.sample"
   compileSdk {
     version = release(37)
   }
 
   defaultConfig {
-    applicationId = "com.kmpbaseproject.sample"
+    applicationId = "com.kmpproject.sample"
     minSdk = 26
     targetSdk = 37
     versionCode = 1

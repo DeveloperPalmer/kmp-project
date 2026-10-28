@@ -5,7 +5,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.cities.data"
+    namespace = "com.kmpproject.feature.cities.data"
   }
 
   sourceSets {

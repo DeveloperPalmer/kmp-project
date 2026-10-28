@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.hometabs.ui"
+    namespace = "com.kmpproject.feature.hometabs.ui"
   }
 }
 

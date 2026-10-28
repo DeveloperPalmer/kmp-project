@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">KmpBaseProject</string>
+  <string name="app_name">KmpProject</string>
   <string name="cities_download_with_service">Download with Service</string>
   <string name="cities_download_with_work_manager">Download with WorkManager</string>
   <string name="cities_export_cancel">Cancel</string>

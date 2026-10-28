@@ -21,7 +21,7 @@ dependencies {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.shared"
+    namespace = "com.kmpproject.shared"
   }
 
   targets.withType<KotlinNativeTarget>().configureEach {

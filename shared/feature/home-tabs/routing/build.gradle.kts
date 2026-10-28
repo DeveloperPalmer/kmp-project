@@ -5,7 +5,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.hometabs.routing"
+    namespace = "com.kmpproject.feature.hometabs.routing"
   }
 }
 

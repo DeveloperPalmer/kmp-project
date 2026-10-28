@@ -7,7 +7,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.lib.annotation"
+    namespace = "com.kmpproject.lib.annotation"
     compileSdk = 37
     minSdk = 26
 

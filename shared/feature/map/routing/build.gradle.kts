@@ -5,7 +5,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.map.routing"
+    namespace = "com.kmpproject.feature.map.routing"
   }
 }
 

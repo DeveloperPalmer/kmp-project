@@ -5,7 +5,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.map.data"
+    namespace = "com.kmpproject.feature.map.data"
   }
 }
 

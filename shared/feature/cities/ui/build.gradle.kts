@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.cities.ui"
+    namespace = "com.kmpproject.feature.cities.ui"
   }
 }
 

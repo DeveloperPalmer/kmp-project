@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
   android {
-    namespace = "com.kmpbaseproject.feature.map.ui"
+    namespace = "com.kmpproject.feature.map.ui"
     withHostTest {}
   }
 
